@@ -6,7 +6,7 @@ stages:
 
 jobs: 
   includes:
-    - name: Eslint
-    stage: lint
+    - name: Transpile
+    stage: transpile
     install: npm install
     script: npm lint
