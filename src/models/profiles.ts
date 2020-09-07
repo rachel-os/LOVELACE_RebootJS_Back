@@ -1,6 +1,6 @@
 import { Document, Schema, model, Model } from 'mongoose';
 
-//j'ai besoin d'exporter pour pouvoir préciser le typage adéquat (qui ne peut être undefined!!!) 
+//j'ai besoin d'exporter pour pouvoir préciser le typage adéquat (qui ne peut être undefined) 
 export interface IProfile extends Document {
   email: string;
   lastname: string;
