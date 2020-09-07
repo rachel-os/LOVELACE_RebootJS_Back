@@ -1,6 +1,7 @@
 import { Document, Schema, model, Model } from 'mongoose';
+import { SHA256 } from 'crypto-js';
 
-//j'ai besoin d'exporter pour pouvoir préciser le typage adéquat (qui ne peut être undefined.) 
+//j'ai besoin d'exporter pour pouvoir préciser le typage adéquat (qui ne peut être undefined).
 export interface IProfile extends Document {
   email: string;
   lastname: string;
@@ -20,6 +21,14 @@ const profileSchema = new Schema ({
 
 profileSchema.methods.getFullname = function () {
   return `${this.firstname} ${this.lastname}`
+}
+
+profileSchema.methods.setPassword = function (password:string) {
+  this.password = SHA256(password).toString();
+}
+
+profileSchema.methods.checkPassword = function (password:string) {
+  return this.password === SHA256(password).toString();
 }
 
 //je lie mon interface de code (l.3) avec mongoDB que l'on doit stocker dans collection "profile" de moongoose

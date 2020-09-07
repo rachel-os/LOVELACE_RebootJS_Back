@@ -4,9 +4,10 @@ import { Profile } from '../models/profiles';
 const router = Router();
 
 router.post('/', (req: Request, res: Response) => {
-  const { email, firstname, lastname } = req.body;
+  const { email, firstname, lastname, password } = req.body;
 
   const newProfile = new Profile({email: email, firstname: firstname, lastname: lastname});
+  newProfile.setPassword(password);
   newProfile.save();
 
   res.send('New user successfully created!')

@@ -5,6 +5,8 @@ import { configuration, IConfig } from "./config";
 import { connect } from './database';
 
 import profileRoutes from "./routes/profileRoute";
+import loginRoute from './routes/loginRoute';
+import { authenticationInitialize } from './controller/authentification';
 
 export function createExpressApp(config: IConfig): express.Express {
   const { express_debug } = config;
@@ -15,15 +17,18 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(helmet());
   app.use(express.json());
 
+  app.use(authenticationInitialize());
+
   app.use(((err, _req, res, _next) => {
     console.error(err.stack);
     res.status?.(500).send(!express_debug ? 'Oups' : err);
   }) as ErrorRequestHandler);
 
-  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
-
   //je remplace mes anciennes routes GET et POST par un appel au fichier route défini :
-  app.use('./profile', profileRoutes)
+  app.use('./profile', profileRoutes);
+  app.use('/login', loginRoute);
+  
+  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
 
   return app;
 }
