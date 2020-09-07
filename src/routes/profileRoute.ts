@@ -8,10 +8,11 @@ router.post('/', (req: Request, res: Response) => {
 
   const newProfile = new Profile({email: email, firstname: firstname, lastname: lastname});
   newProfile.save();
+  
   res.send('New user successfully created!')
 });
 
-router.get('/profile/:profileId', (req: Request, res: Response) => {
+router.get('/:profileId', (req: Request, res: Response) => {
   const profileId = req.params["profileId"];
 
   Profile.findById(profileId, '_id email', (err, profile) => {
