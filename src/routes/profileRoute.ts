@@ -3,7 +3,7 @@ import { Profile } from '../models/profiles';
 
 const router = Router();
 
-router.post('/profile', (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
   const { email, firstname, lastname } = req.body;
 
   const newProfile = new Profile({email: email, firstname: firstname, lastname: lastname});
@@ -18,7 +18,7 @@ router.get('/profile/:profileId', (req: Request, res: Response) => {
     if(err) { console.log("Sorry. An error has been detected.");}
     if (profile == null) {res.status(404); return; }
 
-    res.send(profile.email);
+    res.send(profile);
   });
 });
 
