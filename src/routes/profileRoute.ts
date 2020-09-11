@@ -1,27 +1,47 @@
 import { Request, Response, Router } from 'express';
 import { Profile } from '../models/profiles';
+import { authenticationRequired } from '../middlewares/authenticationRequired';
+import { getAllProfiles, getProfile } from '../controllers/profiles';
 
 const router = Router();
 
+// création d'un nouveau profil
 router.post('/', (req: Request, res: Response) => {
   const { email, firstname, lastname, password } = req.body;
 
-  const newProfile = new Profile({email: email, firstname: firstname, lastname: lastname});
+  const newProfile = new Profile({ email: email, firstname: firstname, lastname: lastname });
   newProfile.setPassword(password);
   newProfile.save();
 
   res.send('New user successfully created!')
 });
 
-router.get('/:profileId', (req: Request, res: Response) => {
+
+//On devient plus précis sur la route GET en rajoutant un middleware avant d'exécuter la fonction 
+router.get('/:profileId', authenticationRequired, (req: Request, res: Response) => {
   const profileId = req.params["profileId"];
 
-  Profile.findById(profileId, '_id email', (err, profile) => {
-    if(err) { console.log("Sorry. An error has been detected.");}
-    if (profile === null) {res.status(404); return; }
-
-    res.send(profile);
-  });
+  getProfile(profileId)
+    .then(profile => {
+      if (profile === null) { return res.status(404).send("Profile not found"); }
+      return res.send(profile.getSafeProfile());
+    }).catch(error => {
+      console.error(error);
+      return res.status(500).send()
+    }
+    )
 });
+
+router.get('/', (req: Request, res: Response) => {
+  getAllProfiles()
+    .then(profiles => profiles.map(profile => profile.getSafeProfile()))
+    .then(safeProfiles => {
+      return res.status(200).send(safeProfiles);
+    })
+    .catch(error => {
+      console.error(error);
+      return res.status(500).send();
+    })
+})
 
 export default router;

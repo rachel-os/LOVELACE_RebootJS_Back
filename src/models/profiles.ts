@@ -9,7 +9,10 @@ export interface IProfile extends Document {
   getFullName: () => string;
   setPassword: (password: string)  => void;
   checkPassword: (password : string) => boolean;
+  getSafeProfile: () => ISafeProfile;
 }
+
+export type ISafeProfile = Pick<IProfile, '_id' | 'email' | 'lastname' | 'firstname'>
 
 //je définis des contraintes sur ma DB grâce à mongoose 
 const profileSchema = new Schema ({
@@ -22,6 +25,11 @@ const profileSchema = new Schema ({
 profileSchema.methods.getFullname = function () {
   return `${this.firstname} ${this.lastname}`
 }
+
+profileSchema.methods.getSafeProfile = function (): ISafeProfile {
+  const { _id, email, lastname, firstname } = this;
+  return { _id, email, lastname, firstname };
+};
 
 profileSchema.methods.setPassword = function (password:string) {
   this.password = SHA256(password).toString();

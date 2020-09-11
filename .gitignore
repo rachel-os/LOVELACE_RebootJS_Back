@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 export-pwd.sh
 dist/
+src/axios.ts
