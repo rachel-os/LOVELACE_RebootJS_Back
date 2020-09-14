@@ -1,9 +1,14 @@
 import { Request, Response, Router } from 'express';
-import { Profile } from '../models/profiles';
+import { IProfile, Profile } from '../models/profiles';
 import { authenticationRequired } from '../middlewares/authenticationRequired';
 import { getAllProfiles, getProfile } from '../controllers/profiles';
 
 const router = Router();
+
+router.get("/me", authenticationRequired, (request: Request, response: Response) => {
+  if(!request.user) { return response.status(401).send() }
+  return response.json((request.user as IProfile).getSafeProfile());
+});
 
 // création d'un nouveau profil
 router.post('/', (req: Request, res: Response) => {
