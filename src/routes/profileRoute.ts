@@ -11,9 +11,13 @@ router.post('/', (req: Request, res: Response) => {
 
   const newProfile = new Profile({ email: email, firstname: firstname, lastname: lastname });
   newProfile.setPassword(password);
-  newProfile.save();
-
-  res.send('New user successfully created!')
+  newProfile.save()
+    .then(profile => {
+      return res.send(profile.getSafeProfile());
+    }).catch(error => {
+      console.error(error);
+      return res.status(500).send();
+    });
 });
 
 

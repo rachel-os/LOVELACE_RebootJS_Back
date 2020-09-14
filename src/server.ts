@@ -24,7 +24,10 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(morgan('combined'));
   app.use(helmet());
   app.use(express.json());
-  app.use(cors({credentials: true, origin: true}));
+  app.use(cors({
+    credentials: true, 
+    origin: true
+  }));
   
   app.use(session({
     name: session_cookie_name,
@@ -43,7 +46,7 @@ export function createExpressApp(config: IConfig): express.Express {
   }) as ErrorRequestHandler);
 
   //je remplace mes anciennes routes GET et POST par un appel au fichier route défini :
-  app.use('/profile', profileRoute);
+  app.use('/profiles', profileRoute);
   app.use('/login', loginRoute);
   app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
 
