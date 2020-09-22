@@ -37,7 +37,7 @@ if(!req.user) { return res.status(401).send() }
 })
 
 // création d'un nouveau profil
-router.post('/', (req: Request, res: Response) => {
+router.post('/',  authenticationRequired, (req: Request, res: Response) => {
   const { email, firstname, lastname, password } = req.body;
 
   const newProfile = new Profile({ email: email, firstname: firstname, lastname: lastname });
@@ -50,7 +50,6 @@ router.post('/', (req: Request, res: Response) => {
       return res.status(500).send();
     });
 });
-
 
 //On devient plus précis sur la route GET en rajoutant un middleware avant d'exécuter la fonction 
 router.get('/:profileId', authenticationRequired, (req: Request, res: Response) => {
@@ -67,7 +66,7 @@ router.get('/:profileId', authenticationRequired, (req: Request, res: Response) 
     )
 });
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', authenticationRequired, (req: Request, res: Response) => {
   getAllProfiles()
     .then(profiles => profiles.map(profile => profile.getSafeProfile()))
     .then(safeProfiles => {
@@ -78,5 +77,7 @@ router.get('/', (req: Request, res: Response) => {
       return res.status(500).send();
     })
 })
+
+// j'ajoute une route avec fonction asynchrone pour les conversations non lues. 
 
 export default router;

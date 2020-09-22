@@ -9,6 +9,7 @@ import { authenticationInitialize, authenticationSession } from './controllers/a
 
 import profileRoute from "./routes/profileRoute";
 import loginRoute from './routes/loginRoute';
+import messageRoute from './routes/messageRoute';
 
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
@@ -48,8 +49,11 @@ export function createExpressApp(config: IConfig): express.Express {
   //je remplace mes anciennes routes GET et POST par un appel au fichier route défini :
   app.use('/profiles', profileRoute);
   app.use('/login', loginRoute);
-  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
+  
+  //j'ajoute une nouvelle route qui renvoie à toutes les conversations 
+  app.use('/messages', messageRoute);
 
+  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app.') });
   return app;
 }
 
