@@ -10,9 +10,9 @@ router.post('/', (req: Request, res: Response) => {
   passport.authenticate('local', (err, profile : IProfile) => {
     if(err) {
       if(err instanceof ProfileNotFoundError){
-        return res.status(404).send('Profile not found');
+        return res.status(404).send('Profile not found.');
       } else {
-        return res.status(500).send('An error occured.');
+        return res.status(500).send('An error occurred.');
       }
     }
     if(profile) {

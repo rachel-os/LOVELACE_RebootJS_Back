@@ -16,7 +16,7 @@ async function getAllMessages(user: IProfile, conversationId?: string){
     const messages = await Message.find(
       query,
       null,
-      {sort: {createdAt: 1}}
+      { sort: { createdAt: 'asc' }}
     );
     return messages;
   } catch (error) {
@@ -24,8 +24,9 @@ async function getAllMessages(user: IProfile, conversationId?: string){
   }
 }
 
-async function createMessage(user: IProfile, conversationId: string, targets: string[], emitter: string, content: string){
-  // TO DO
+async function createMessage(conversationId: string, targets: string[], emitter: string, content: string){
+  const message = new Message({conversationId, targets, emitter, content})
+  return await message.save();
 }
 
 export {
