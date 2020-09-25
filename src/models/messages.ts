@@ -12,9 +12,9 @@ export interface IMessage extends Document {
 const messageSchema = new Schema ({
   conversationId: { type: String, required: true},
   content: { type: String, required: true},
-  createdAt: { type: Schema.Types.Date, required: true },
+  createdAt: { type: String, required: true, default: new Date().toISOString() },
   emitter: { type: Schema.Types.ObjectId, ref: 'profiles' },
-  targets: { type: [{type: Schema.Types.ObjectId, ref: "profile"}], required: true},
+  targets: [{type: Schema.Types.ObjectId, ref: "profile", required: true}],
 });
 
 export const Message = model<IMessage, Model<IMessage>>("message", messageSchema);
