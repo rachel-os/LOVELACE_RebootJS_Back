@@ -37,7 +37,7 @@ if(!req.user) { return res.status(401).send() }
 })
 
 // création d'un nouveau profil
-router.post('/',  authenticationRequired, (req: Request, res: Response) => {
+router.post('/', (req: Request, res: Response) => {
   const { email, firstname, lastname, password } = req.body;
 
   const newProfile = new Profile({ email: email, firstname: firstname, lastname: lastname });
